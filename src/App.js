@@ -1,14 +1,33 @@
-import logo from './logo.svg';
 import './App.css';
-// import './mycss.css'
-// import * as classstyle from './mycs.module.css'
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Card } from 'antd'
 
+import { HelloWorld, Navbar,  } from './components/';
+import { getCurrentPostsToUser } from './services/postService';
+
+import { Routes, Route, useLocation } from 'react-router-dom'
 function App() {
+  
+
+  return(
+    <Navbar>
+      <Routes>
+        <Route path='/' element={ <Home />}/>
+        <Route path='/hello/:id/temp/:dataid' element={ <HelloWorld />}/>
+        <Route path='*' element={ <NotFoud />}/>
+      </Routes>
+      <div></div>
+      
+    </Navbar>
+  )
+}
+
+const Home = () => {
   const [counter, setCounter] = useState()
   const [users, setUsers] = useState([])
 
+  const location = useLocation()
+  console.log('location:',location)
 
   const increment = () => {
     setCounter(counter+1)
@@ -49,18 +68,25 @@ function App() {
     marginBottom: 5,
     // backgroudColor: '#333'
   }
+
   return(
-    <>
-      <h2>Users: <button type="" onClick={() => {loadUsers()}}>Load users</button></h2>
-      <div style={{margin: 50, display: 'flex', gap: 16}}>
-        {users.length > 0 &&
-          users.map(user => {
-            return <Card title={user.name} key={Math.random()} style={{width: 200}}><p  >{user.email}</p></Card>
-          })
-        }
-      </div>
-    </>
+  <div>
+    <h2>Users: <button type="" onClick={() => {loadUsers()}}>Load users</button></h2>
+    <div style={{margin: 50, display: 'flex', gap: 16}}>
+      {users.length > 0 &&
+        users.map(user => {
+          // getCurrentPostsToUser(user.id, posts)
+          return <Card title={user.name} key={Math.random()} style={{width: 200}}><p  >{user.email}</p></Card>
+        })
+      }
+    </div>
+  </div>
   )
 }
 
+const NotFoud = () => {
+  return(
+    <> <h1>Page not found!</h1></>
+  )
+}
 export default App;
