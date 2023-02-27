@@ -2,22 +2,26 @@ import './App.css';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Card } from 'antd'
 
-import { HelloWorld, Navbar,  } from './components/';
+import { HelloWorld, Navbar, Posts, PostPage } from './components/';
 import { getCurrentPostsToUser } from './services/postService';
 
 import { Routes, Route, useLocation } from 'react-router-dom'
+// import { Posts } from './components/PostsPage/Posts';
+// import { PostPage } from './components/PostPage/PostPage';
 function App() {
-  
 
-  return(
+
+  return (
     <Navbar>
       <Routes>
-        <Route path='/' element={ <Home />}/>
-        <Route path='/hello/:id/temp/:dataid' element={ <HelloWorld />}/>
-        <Route path='*' element={ <NotFoud />}/>
+        <Route path='/' element={<Home />} />
+        <Route path='/posts' element={<Posts />} />
+        <Route path='/post/:id' element={<PostPage />} />
+        <Route path='/hello/:id/temp/:dataid' element={<HelloWorld />} />
+        <Route path='*' element={<NotFoud />} />
       </Routes>
       <div></div>
-      
+
     </Navbar>
   )
 }
@@ -27,14 +31,14 @@ const Home = () => {
   const [users, setUsers] = useState([])
 
   const location = useLocation()
-  console.log('location:',location)
+  console.log('location:', location)
 
   const increment = () => {
-    setCounter(counter+1)
+    setCounter(counter + 1)
   }
   const decrement = () => {
-    if (counter > 0) setCounter(counter-1)
-    
+    if (counter > 0) setCounter(counter - 1)
+
   }
 
   const getData = () => {
@@ -52,11 +56,11 @@ const Home = () => {
     getData()
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     getData()
   }, [])
 
-  
+
 
   const styles = {
     // 'border: 1 solid #000',
@@ -69,23 +73,23 @@ const Home = () => {
     // backgroudColor: '#333'
   }
 
-  return(
-  <div>
-    <h2>Users: <button type="" onClick={() => {loadUsers()}}>Load users</button></h2>
-    <div style={{margin: 50, display: 'flex', gap: 16}}>
-      {users.length > 0 &&
-        users.map(user => {
-          // getCurrentPostsToUser(user.id, posts)
-          return <Card title={user.name} key={Math.random()} style={{width: 200}}><p  >{user.email}</p></Card>
-        })
-      }
+  return (
+    <div>
+      <h2>Users: <button type="" onClick={() => { loadUsers() }}>Load users</button></h2>
+      <div style={{ margin: 50, display: 'flex', gap: 16 }}>
+        {users.length > 0 &&
+          users.map(user => {
+            // getCurrentPostsToUser(user.id, posts)
+            return <Card title={user.name} key={Math.random()} style={{ width: 200 }}><p  >{user.email}</p></Card>
+          })
+        }
+      </div>
     </div>
-  </div>
   )
 }
 
 const NotFoud = () => {
-  return(
+  return (
     <> <h1>Page not found!</h1></>
   )
 }

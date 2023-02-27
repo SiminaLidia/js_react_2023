@@ -1,35 +1,65 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { Menu, Layout } from 'antd'
 
 
+const {Content, Footer } = Layout;
 
 export const Navbar = (props) => {
   const navigation = useNavigate()
-  
-  const goToHome = () => {
-    navigation('/', {
-      state: {
-        userId: 12,
-        postId: 1,
-      }
-    })
-  }
 
-  
+  // const goToHome = () => {
+  //   navigation('/', {
+  //     state: {
+  //       userId: 12,
+  //       postId: 1,
+  //     }
+  //   })
+  // }
+
+  const navItems = [
+    {
+      label: <Link to="/" >Главная</Link>,
+      key: 'home',
+
+    },
+    {
+      label: <Link to="/posts" >Посты</Link>,
+      key: 'posts',
+
+    },
+    {
+      label: <Link to="/login" >Вход</Link>,
+      key: 'login',
+
+    },
+    {
+      label: <Link to="/register" >Регистрация</Link>,
+      key: 'register',
+
+    },
+  ]
+
+  const [current, setCurrent] = useState('home');
+  const onClick = (e) => {
+    setCurrent(e.key);
+  };
+
   return (
     <>
       <div>
         <nav>
-          <ul>
-            <li><Link to='/'>Go to home page</Link></li>
-            <li><button onClick={() => goToHome()}>Go to home</button></li>
-            <li><Link to='/hello/25/temp/10w0q0q'>Go to hello</Link></li>
-          </ul>
+
+          <Menu onClick={(e) => onClick(e)} selectedKeys={[current]} mode="horizontal" items={navItems} />
         </nav>
-        <hr/>
       </div>
       <div>
-        {props.children}
+        <Content style={{ padding: '50px 50px' }}>
+          <div className="site-layout-content" style={{ padding: 10, height: '100vh'}}>
+            {props.children}
+          </div>
+        </Content>
+
       </div>
     </>
   )

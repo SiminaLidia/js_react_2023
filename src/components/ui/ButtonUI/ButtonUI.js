@@ -1,9 +1,10 @@
 import React from 'react'
+import { Button } from 'antd'
 
-export const ButtonUI = ({label}) => {
+export const ButtonUI = ({ label, onClick }) => {
   return (
     <>
-      <button type="">{label}</button>
+      <Button type="primary" onClick={onClick} size='small'>{label}</Button>
     </>
   )
 }
