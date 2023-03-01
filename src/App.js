@@ -1,34 +1,40 @@
 import './App.css';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Card } from 'antd'
+import { Card, Spin } from 'antd'
 
 import { HelloWorld, Navbar, Posts, PostPage } from './components/';
 import { getCurrentPostsToUser } from './services/postService';
 
 import { Routes, Route, useLocation } from 'react-router-dom'
+import { getPosts } from './store/actions/postsActions';
+import { useDispatch, useSelector } from 'react-redux'
+
 // import { Posts } from './components/PostsPage/Posts';
 // import { PostPage } from './components/PostPage/PostPage';
 function App() {
 
 
-  return (
-    <Navbar>
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/posts' element={<Posts />} />
-        <Route path='/post/:id' element={<PostPage />} />
-        <Route path='/hello/:id/temp/:dataid' element={<HelloWorld />} />
-        <Route path='*' element={<NotFoud />} />
-      </Routes>
-      <div></div>
+    return (
+      <Navbar>
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/posts' element={<Posts />} />
+          <Route path='/post/:id' element={<PostPage />} />
+          <Route path='/hello/:id/temp/:dataid' element={<HelloWorld />} />
+          <Route path='*' element={<NotFoud />} />
+        </Routes>
+        <div></div>
 
-    </Navbar>
-  )
-}
+      </Navbar>
+    )
+  }
 
 const Home = () => {
   const [counter, setCounter] = useState()
   const [users, setUsers] = useState([])
+  // const { loading, success, posts: users } = useSelector((state => state.posts))
+
+  // const dispatch = useDispatch()
 
   const location = useLocation()
   console.log('location:', location)
@@ -58,6 +64,7 @@ const Home = () => {
 
   useEffect(() => {
     getData()
+    // dispatch(getPosts)
   }, [])
 
 
@@ -73,11 +80,12 @@ const Home = () => {
     // backgroudColor: '#333'
   }
 
+
   return (
     <div>
       <h2>Users: <button type="" onClick={() => { loadUsers() }}>Load users</button></h2>
       <div style={{ margin: 50, display: 'flex', gap: 16 }}>
-        {users.length > 0 &&
+        {users && users.length > 0 &&
           users.map(user => {
             // getCurrentPostsToUser(user.id, posts)
             return <Card title={user.name} key={Math.random()} style={{ width: 200 }}><p  >{user.email}</p></Card>
