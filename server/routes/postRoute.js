@@ -49,11 +49,12 @@ router.post('/post/add', async (req, res) => {
     errMsg: 'Ошибка при добавлении поста'
   }
 
+  const { body } = req
   try {
     const post = new Post({
-      title: "Hellow World",
-      short_desc: "Lorem ipsum",
-      full_desc: "Lorem qweasdjjghghghg",
+      title: body.title,
+      short_desc: body.short_desc,
+      full_desc: body.full_desc,
       create_date: new Date()
     })
 
@@ -69,19 +70,24 @@ router.post('/post/add', async (req, res) => {
   }
 })
 
-router.put('/post/:id/update', async (req, res) => {
+router.post('/post/:id/update', async (req, res) => {
   const response = {
     ok: false,
     errMsg: 'Ошибка обления поста'
   }
 
   const { id } = req.params
+  const { body } = req
+
+  console.log('body', body)
 
   try {
     const post = await Post.findOne({ '_id': id })
 
-    post.short_desc = '63fc51c11465486313bf2cd263fc51c11465486313bf2cd263fc51c11465486313bf2cd263fc51c11465486313bf2cd263fc51c11465486313bf2cd2'
-    
+    post.title = body.title
+    post.short_desc = body.short_desc
+    post.full_desc = body.full_desc
+
     await post.save()
     
     response.ok = true

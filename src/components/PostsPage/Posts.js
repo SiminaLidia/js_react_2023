@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Skeleton, Typography } from 'antd'
+import { Card, Form, Skeleton, Typography, Input, Button } from 'antd'
 import moment from 'moment'
 import { ButtonUI } from '../ui/ButtonUI/ButtonUI'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { getPosts } from '../../store/actions/postsActions'
+import { createPost, getPosts } from '../../store/actions/postsActions'
 
 export const Posts = () => {
 
@@ -13,6 +13,13 @@ export const Posts = () => {
 
   // const [posts, setPosts] = useState([])
   // const [isLoading, setLoading] = useState(true)
+  const [addPostFlag, setAddPostFlag] = useState(false)
+  const [formData, setFormData] = useState({
+    title: '',
+    short_desc: '',
+    full_desc: ''
+  })
+
   const { posts, loading, success, errMsg } = useSelector((state) => state.posts)
 
   useEffect(() => {
@@ -41,6 +48,12 @@ export const Posts = () => {
       navigation(`/post/${id}`)
     }
   }
+
+  const createPostMethon = async () => {
+    await createPost(dispatch, formData)
+    navigation('/posts')
+  }
+
   return (
     <div>
 
@@ -49,11 +62,35 @@ export const Posts = () => {
       }
 
       {!loading && !success && errMsg.length > 0 &&
-        <Typography style={{color:'red'}}>{errMsg}</Typography>
+        <Typography style={{ color: 'red' }}>{errMsg}</Typography>
       }
-      {!loading && posts && Array.isArray(posts) &&
+
+      {!loading && !addPostFlag &&
+        <div style={{ marginBottom: 10 }}>
+          <Button onClick={() => setAddPostFlag(!addPostFlag)}> Добавить новый пост</Button>
+        </div>
+      }
+
+      {!loading && addPostFlag &&
+        <Form>
+          <Form.Item label={'Заголовок'}>
+            <Input value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} />
+          </Form.Item>
+          <Form.Item label={'Краткое содержание'}>
+            <Input.TextArea rows={4} value={formData.short_desc} onChange={(e) => setFormData({ ...formData, short_desc: e.target.value })} />
+          </Form.Item>
+          <Form.Item label={'Полное содержание'}>
+            <Input.TextArea rows={4} value={formData.full_desc} onChange={(e) => setFormData({ ...formData, full_desc: e.target.value })} />
+          </Form.Item>
+          <Form.Item >
+            <Button onClick={() => createPostMethon()}>Создать</Button>
+          </Form.Item>
+        </Form>
+      }
+
+      {!loading && !addPostFlag && posts && Array.isArray(posts) &&
         posts.map((item, index) => {
-          return <Card key={Math.random()} title={item.title}>
+          return <Card key={Math.random()} title={item.title} style={{margin: 5, boxShadow:'0px 0px 3px' }}>
             <p style={{ wordBreak: 'break-all' }}>{item.short_desc}</p>
             <span
               style={{ color: '#959595' }}

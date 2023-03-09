@@ -3,6 +3,7 @@ const initState = {
   success: false,
   errMsg: '',
   posts: [],
+  postId: '',
 }
 
 
@@ -23,6 +24,10 @@ export const postsReducer = (state = initState, action) => {
     case 'getPost_onfetch':
       return { ...state, posts: [], loading: true, success: false }
     case 'getPost_error':
+      return { ...state, ...action }
+    case 'updatePost_success':
+      return { ...state, ...action }
+    case 'createPost_success':
       return { ...state, ...action }
 
 
